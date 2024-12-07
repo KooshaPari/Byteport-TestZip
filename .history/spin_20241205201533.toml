@@ -1,0 +1,21 @@
+spin_manifest_version = 2
+
+[application]
+name = "byteport"
+version = "0.1.0"
+authors = ["Koosha Paridehpour <kooshapari@gmail.com>"]
+description = "Test"
+
+[[trigger.http]]
+route = "/..."
+component = "byteport"
+
+[component.byteport]
+source = "main.wasm"
+allowed_outbound_hosts = ["*://localhost::*", "*://127.0.0.1:*", "*://*:*"]
+[component.byteport.build]
+command = "tinygo build -target=wasip2"
+watch = ["**/*.go", "go.mod"]
+[component.byteport.tool.spin-test]
+source = "test.wasm"
+build= "tinygo test -target=wasip2"

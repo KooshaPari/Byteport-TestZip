@@ -1,0 +1,36 @@
+spin_manifest_version = 2
+
+[application]
+name = "byteport"
+version = "0.1.0"
+authors = ["Koosha Paridehpour <kooshapari@gmail.com>"]
+description = "Test"
+
+[[trigger.http]]
+route = "/main"
+component = "byteport"
+
+[component.byteport]
+source = "Byteport.wasm"
+files = ["odin-dash.zip"]
+allowed_outbound_hosts =  ["http://*:*","http://*.spin.internal"]
+[component.byteport.build]
+command = "tinygo build -target=wasip1"
+watch = ["**/*.go", "go.mod"]
+[component.byteport.tool.spin-test]
+source = "test.wasm"
+build= "tinygo test -target=wasip1"
+workdir = "./"
+
+[[trigger.http]]
+route = "/home"
+component = "zip-server"
+
+[component.zip-server]
+source = "ZipServer/ZipServer.wasm"
+files = ["ZipServer/odin-dash.zip","odin-dash.zip"]
+allowed_outbound_hosts =  ["http://*:*","http://*.spin.internal"]
+[component.zip-server.build]
+command = "tinygo build -target=wasip1"
+workdir = "ZipServer"
+watch = ["**/*.go", "go.mod"]
